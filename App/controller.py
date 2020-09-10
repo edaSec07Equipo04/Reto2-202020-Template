@@ -37,10 +37,36 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
+ar = "ARRAY_LIST"
+
+def compareRecordIds (recordA, recordB):
+    if int(recordA['id']) == int(recordB['id']):
+        return 0
+    elif int(recordA['id']) > int(recordB['id']):
+        return 1
+    return -1
 
 
+def loadCSVFile (file, cmpfunction):
+   
+    lst = model.nueva_lista(ar)
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row: 
+                
+                model.añanir_pelicula(lst,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return lst
+
+print(loadCSVFile("SmallMoviesDetailsCleaned.csv",compareRecordIds))
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+
+
