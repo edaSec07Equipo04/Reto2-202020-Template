@@ -30,6 +30,6 @@ Este directorio contiene todo el código de base que se entrega para el funciona
 -Test
 Este directorio contiene las pruebas realizadas a los TADs, Estructuras de Datos y Algoritmos.
 
-Juan Esteban Rodriguez Ospino - j.rodriguezo@uniandes.edu.co - 202011171
-Juan Sebastián Peña Muñoz - j.penam@uniandes.edu.co - 202013078
+Juan Esteban Rodriguez Ospino - j.rodriguezo@uniandes.edu.co - 202011171 |
+Juan Sebastián Peña Muñoz - j.penam@uniandes.edu.co - 202013078 |
 German Alberto Rojas Cetina - g.rojasc@uniandes.edu.co - 202013415
