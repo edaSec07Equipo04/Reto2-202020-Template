@@ -35,7 +35,17 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
 
-
+def nueva_lista(estructura,):
+    
+    lista = lt.newList(datastructure= 'ARRAY_LIST',cmpfunction= None)
+        
+    return lista
+ 
+def añanir_pelicula(lista,pelicula):
+ 
+    lista = lt.addLast(lista,pelicula)
+ 
+    return lista
 
 # Funciones para agregar informacion al catalogo
 
