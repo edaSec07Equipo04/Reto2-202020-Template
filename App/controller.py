@@ -44,7 +44,7 @@ def compareRecordIds (recordA, recordB):
         return 0
     elif int(recordA['id']) > int(recordB['id']):
         return 1
-    return -1
+    return -1 
 
 
 def loadCSVFile (file, cmpfunction):
@@ -62,7 +62,6 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
-print(loadCSVFile("SmallMoviesDetailsCleaned.csv",compareRecordIds))
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
