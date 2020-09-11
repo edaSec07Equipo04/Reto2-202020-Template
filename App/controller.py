@@ -39,6 +39,14 @@ recae sobre el controlador.
 
 ar = "ARRAY_LIST"
 
+def initCatalog():
+    """
+    Llama la función de inicialización del catálogo del modelo.
+    """
+    # catalog es utilizado para interactuar con el mdoelo
+    catalog = model.newCatalog()
+    return catalog
+
 def compareRecordIds (recordA, recordB):
     if int(recordA['id']) == int(recordB['id']):
         return 0
@@ -46,6 +54,27 @@ def compareRecordIds (recordA, recordB):
         return 1
     return -1 
 
+# ___________________________________________________
+#  Funciones para la la obtención de datos requeridos
+# ___________________________________________________
+def moviesSize(catalog):
+    """
+    Número de películas leidas
+    """
+    return model.moviesSize(catalog)
+
+def producersSize(catalog):
+    """
+    Número de productoras leídas
+    """
+    return model.producersSize(catalog)
+
+def getMoviesByProdutionCompany(catalog,producer):
+    return model.getGoviesByProductionCompany(catalog,producer)
+# ___________________________________________________
+#  Funciones para la carga de datos y almacenamiento
+#  de datos en los modelos
+# ___________________________________________________
 
 def loadCSVFile (file, cmpfunction):
    
@@ -63,9 +92,26 @@ def loadCSVFile (file, cmpfunction):
     return lst
 
 
-# ___________________________________________________
-#  Funciones para la carga de datos y almacenamiento
-#  de datos en los modelos
-# ___________________________________________________
+def loadMovies(catalog,moviesfile):
+    """
+    Descripción
+    """
+    moviesfile = cf.data_dir + moviesfile
+    dialect = csv.excel()
+    dialect.delimiter=';'
+    try:
+        with open(moviesfile,encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile,dialect=dialect)
+            for movie in row:
+                model.addMovie(catalog,movie)
+                producers = movie['production_companies'] # Se obtienen las productoras
+                model.addMovieProducer(catalog,producers,movie)
+    except:
+        print("Hubo un error en la carga de archivos")
 
 
+def loadData(catalog,moviesfile):
+    """
+    Descripción
+    """
+    loadMovies(catalog,moviesfile)
