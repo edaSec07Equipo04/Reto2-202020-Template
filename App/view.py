@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
 castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 
 # ___________________________________________________
@@ -47,7 +47,7 @@ castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
-
+'''
 def printLoadingData(data):
     """
     Imprime la información de los datos cargados
@@ -68,14 +68,18 @@ def printLoadingData(data):
         print('Idioma de la película:',data['elements'][lt.size(data)-1]['original_language'])
     else:
         print('No se ha logrado cargar los archivos')
-
+'''
 
 
 def printMoviesByProductionCompany(producer):
     """
     Imprime los datos de la productora de cine
     """
-    return 0
+    titles,quantity,vote_average = controller.getMoviesByProdutionCompany(cont,producer)
+    print('Películas producidas por la compañía:')
+    print(titles)
+    print('Cantidad de películas producidas por la compañía: ' + str(quantity))
+    print('Promedio de calificación de las películas de esta productora: '+str(vote_average))
 
 
 def printMoviesByDirector(director):
@@ -113,13 +117,13 @@ def printMoviesByCountry(country):
 
 def printMenu():
     print("Bienvenido")
-    #print("1- Inicializar Catálogo")
-    print("1- Cargar información")
-    print("2- Consultar las películas de una productora")
-    print("3- Consultar las películas de un director")
-    print("4- Consultar las películas de un actor")
-    print("5- Consultar las películas de un género")
-    print("6- Consultar las películas de un país")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar información")
+    print("3- Consultar las películas de una productora")
+    print("4- Consultar las películas de un director")
+    print("5- Consultar las películas de un actor")
+    print("6- Consultar las películas de un género")
+    print("7- Consultar las películas de un país")
     print("0- Salir")
 
 '''
@@ -128,22 +132,35 @@ Menú principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-
+    '''
     if int(inputs[0])==1:
         print("Cargando datos...")
         data = controller.loadCSVFile(moviesfile,controller.compareRecordIds)
         printLoadingData(data)
         print("Información cargada exitosamente!")
+    '''
+    if int(inputs[0])==1:
+        print("Inicializando catálogo...")
+        try:
+            cont = controller.initCatalog()
+            print("Catálogo inicializado exitosamente!")
+        except:
+            ("Se ha producido un error inicializando el catálogo")
 
     # elif int(inputs[0]) == 2:
      #   print("Cargando información de los archivos ....")
       #  print('Información cargada exitosamente!') 
 
     elif int(inputs[0]) == 2:
-        producer = input("Buscando las películas de la productora?: ")
+        print("Cargando información...")
+        controller.loadData(cont,moviesfile)
+        print('Películas cargadas: '+ str(controller.moviesSize(cont)))
+        print('Productoras cargadas: '+ str(controller.producersSize(cont)))
+        print('Información cargada con éxito')
 
     elif int(inputs[0]) == 3:
-        director = input("Buscando las películas del director?: ")
+        producer = input("Buscando las películas de la productora?: ")
+        printMoviesByProductionCompany(producer)
 
     elif int(inputs[0]) == 4:
         actor = input("Buscando las películas del actor?: ")
