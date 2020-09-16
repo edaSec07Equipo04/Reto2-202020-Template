@@ -66,29 +66,29 @@ def newCatalog():
                'countries':None}
 
     catalog['movies']=lt.newList('ARRAY_LIST',compareRecordIds)
-    catalog['moviesIds'] = mp.newMap(1000,
-                                     maptype='PROBING',
-                                     loadfactor=0.4,
+    catalog['moviesIds'] = mp.newMap(328511,
+                                     maptype= 'PROBING',
+                                     loadfactor=0.5,
                                      comparefunction=compareRecordIds)
-    catalog['producers'] = mp.newMap(800,
-                                    maptype='PROBING',
-                                    loadfactor=0.4,
+    catalog['producers'] = mp.newMap(32647,
+                                    maptype= 'PROBING',
+                                    loadfactor=0.5,
                                     comparefunction=compareProducersByName)
     catalog['directors']=mp.newMap(350,
-                                  maptype='PROBING',
-                                  loadfactor=0.4,
+                                  maptype= 'PROBING',
+                                  loadfactor=0.5,
                                   comparefunction=compareDirectorsByName)
     catalog['actors']=mp.newMap(350,
-                               maptype='PROBING',
-                               loadfactor=0.4,
+                               maptype= 'PROBING',
+                               loadfactor=0.5,
                                comparefunction=compareActorsByName)
     catalog['genres']=mp.newMap(200,
-                               maptype='PROBING',
-                               loadfactor=0.4,
+                               maptype= 'PROBING',
+                               loadfactor=0.5,
                                comparefunction=compareGenresByName)
     catalog['countries']=mp.newMap(350,
-                               maptype='PROBING',
-                               loadfactor=0.4,
+                               maptype= 'PROBING',
+                               loadfactor=0.5,
                                comparefunction=compareCountriesByName)                                                             
     return catalog
 
@@ -143,6 +143,7 @@ def addMovieProducer(catalog,company,movie):
 
 def getGoviesByProductionCompany(catalog,producer):
     company = mp.get(catalog['producers'],producer)
+    
     if company:
         lst = nueva_lista('ARRAY_LIST')
         result = me.getValue(company)
@@ -152,6 +153,7 @@ def getGoviesByProductionCompany(catalog,producer):
             movie = lt.getElement(result['movies'],i)
             añanir_pelicula(lst,movie['title'])
         return lst['elements'],totalMovies,vote_average
+    
     return None
 
 def moviesSize(catalog):

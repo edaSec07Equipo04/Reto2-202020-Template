@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
 castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 
 # ___________________________________________________
@@ -75,11 +75,15 @@ def printMoviesByProductionCompany(producer):
     """
     Imprime los datos de la productora de cine
     """
-    titles,quantity,vote_average = controller.getMoviesByProdutionCompany(cont,producer)
-    print('Películas producidas por la compañía:')
-    print(titles)
-    print('Cantidad de películas producidas por la compañía: ' + str(quantity))
-    print('Promedio de calificación de las películas de esta productora: '+str(vote_average))
+    if controller.getMoviesByProdutionCompany(cont,producer) == None:
+        print("No se halló la productora ingresada")
+        return -1
+    else:
+        titles,quantity,vote_average = controller.getMoviesByProdutionCompany(cont,producer)
+        print('Películas producidas por la compañía:')
+        print(titles)
+        print('Cantidad de películas producidas por la compañía: ' + str(quantity))
+        print('Promedio de calificación de las películas de esta productora: '+str(round(vote_average,2)))
 
 
 def printMoviesByDirector(director):
@@ -160,6 +164,7 @@ while True:
 
     elif int(inputs[0]) == 3:
         producer = input("Buscando las películas de la productora?: ")
+        producer = producer.title()
         printMoviesByProductionCompany(producer)
 
     elif int(inputs[0]) == 4:
