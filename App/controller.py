@@ -71,6 +71,11 @@ def producersSize(catalog):
 
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
+
+#############Requerimiento 3 ###########
+
+def moviesbyactor(catalog,actor):
+    return model.getMoviesByActor(catalog,actor)
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -115,3 +120,4 @@ def loadData(catalog,moviesfile):
     Descripción
     """
     loadMovies(catalog,moviesfile)
+

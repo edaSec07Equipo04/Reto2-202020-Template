@@ -156,6 +156,38 @@ def getGoviesByProductionCompany(catalog,producer):
     
     return None
 
+############requerimiento 3#############################
+def getMoviesByActor(catalog,actor):
+    company = mp.get(catalog['actors'],actor)
+
+    if company:
+        lst = nueva_lista('ARRAY_LIST')
+        r = me.getValue(actor)
+
+        totalMovies = lt.size(r['movies'])
+
+       
+        for i in range(1,lt.size(r['movies']+1)):
+            voto = 0
+            movie = lt.getElement(r['movies'],i)
+            añanir_pelicula(lst,movie['title'])
+
+            voto += int(lt.getElement(r['vote_average'],i))
+
+
+        voto = round((voto/totalMovies),2)
+
+
+        return lst['elements'],totalMovies,voto
+    else:
+        return None
+
+
+
+###################################################
+
+
+
 def moviesSize(catalog):
     """
     Número de películas en el catálogo
@@ -252,3 +284,5 @@ def compareCountriesByName(keyname, country):
         return 1
     else:
         return -1
+
+    

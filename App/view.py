@@ -90,6 +90,7 @@ def printMoviesByDirector(director):
     '''
     Imprime los datos del director
     '''
+    
     return 0
 
 
@@ -97,6 +98,17 @@ def printMoviesByActor(actor):
     '''
     Imprime los datos del actor
     '''
+    if controller.moviesbyactor(cont,actor) == None:
+        print("No se encontró el actor ingresado")
+        return -1
+    else:
+        
+        peliculas,total,voto = controller.moviesbyactor(cont,actor)
+        print("Las peliculas en las que participo " + actor + " fueron :")
+        print(peliculas)
+        print("El actor ha participado en " + str(total))
+        print("El promedio de votación de las películas en las que participó este actor fué: " + str(voto))
+
     return 0
 
 
@@ -158,9 +170,11 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información...")
         controller.loadData(cont,moviesfile)
+        
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
         print('Información cargada con éxito')
+        
 
     elif int(inputs[0]) == 3:
         producer = input("Buscando las películas de la productora?: ")
@@ -168,13 +182,19 @@ while True:
         printMoviesByProductionCompany(producer)
 
     elif int(inputs[0]) == 4:
-        actor = input("Buscando las películas del actor?: ")
+        director = input("Buscando las películas del director?: ")
 
     elif int(inputs[0]) == 5:
-        genero = input("Buscando las películas del género?: ")
+        actor = input("Buscando las películas del actor?: ")
+        actor = actor.title()
+        printMoviesByActor(actor)
+
 
     elif int(inputs[0]) == 6:
-        pais = input("Buscando las películas del país?: ")
+        genero = input("Buscando las películas del genero?: ")
+
+    elif int(input[0]) == 7:
+        pais = input("Buscando peliculas del pais?")
 
     else:
         sys.exit(0)
