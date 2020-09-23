@@ -66,15 +66,15 @@ def newCatalog():
                'countries':None}
 
     catalog['movies']=lt.newList('ARRAY_LIST',compareRecordIds)
-    catalog['moviesIds'] = mp.newMap(328511,
+    catalog['moviesIds'] = mp.newMap(329999,
                                      maptype= 'PROBING',
                                      loadfactor=0.5,
                                      comparefunction=compareRecordIds)
-    catalog['producers'] = mp.newMap(32647,
+    catalog['producers'] = mp.newMap(36007,
                                     maptype= 'PROBING',
                                     loadfactor=0.5,
                                     comparefunction=compareProducersByName)
-    catalog['directors']=mp.newMap(350,
+    catalog['directors']=mp.newMap(85991,
                                   maptype= 'PROBING',
                                   loadfactor=0.5,
                                   comparefunction=compareDirectorsByName)
@@ -102,7 +102,26 @@ def newProducer(company):
     producer['name'] = company
     producer['movies'] = lt.newList('ARRAY_LIST',compareProducersByName)
     return producer
-    
+
+def newDirector(director_name):
+    """
+    Crea una nueva estructura para modelar las películas de un director
+    y su promedio de calificación
+    """
+    director = {'name':'','movies':None,'vote_average':0}
+    director['name'] = director_name
+    director['movies']=lt.newList('ARRAY_LIST',compareDirectorsByName)
+    return director
+
+def newCountry(country_name):
+    """
+    Crea una nueva estructura para modelar las películas de un país
+    y el director que dirigió cada película
+    """
+    country = {'name':'','movies':None}
+    country['name']=country_name
+    country['movies']=lt.newList('ARRAY_LIST',compareCountriesByName)
+    return country
 
     
 
@@ -119,7 +138,8 @@ def addMovie(catalog,movie):
 
 def addMovieProducer(catalog,company,movie):
     """
-    Lo que hace la función
+    Crea una nueva estructura para modelar las películas de una productora de cine
+    y su promedio de calificación
     """
     producers = catalog['producers']
     existproducer = mp.contains(producers,company)
@@ -137,13 +157,43 @@ def addMovieProducer(catalog,company,movie):
     else:
         data['vote_average'] = (proavg+float(movieavg))/2
 
+
+def addMovieDirector(catalog,director,movie):
+    """
+    Crea una nueva estructura para modelar las películas de un director de cine
+    y su promedio de calificación
+    """
+    directors = catalog['directors']
+    existdirector = mp.contains(directors,director)
+    if existdirector:
+        entry = mp.get(directors,director)
+        data = me.getValue(entry)
+    else:
+        data = newDirector(director)
+        mp.put(directors,director,data)
+    lt.addLast(data['movies'],movie)
+
+def addCountry(catalog,country,movie):
+    """
+    Crea una nueva estructura para modelar las películas de un país
+    y el director que dirigió cada película
+    """
+    countries = catalog['countries']
+    existcountry = mp.contains(countries,country)
+    if existcountry:
+        entry = mp.get(countries,country)
+        data = me.getValue(entry)
+    else:
+        data = newCountry(country)
+        mp.put(countries,country,data)
+    lt.addLast(data['movies'],movie)
+
 # ==============================
 # Funciones de consulta
 # ==============================
 
 def getGoviesByProductionCompany(catalog,producer):
-    company = mp.get(catalog['producers'],producer)
-    
+    company = mp.get(catalog['producers'],producer)   
     if company:
         lst = nueva_lista('ARRAY_LIST')
         result = me.getValue(company)
@@ -156,6 +206,7 @@ def getGoviesByProductionCompany(catalog,producer):
     
     return None
 
+<<<<<<< HEAD
 ############requerimiento 3#############################
 def getMoviesByActor(catalog,actor):
     company = mp.get(catalog['actors'],actor)
@@ -187,6 +238,27 @@ def getMoviesByActor(catalog,actor):
 ###################################################
 
 
+=======
+def getMoviesByDirector(catalog,director_name): 
+    director = mp.get(catalog['directors'],director_name)
+    movieavg = 0
+    if director:
+        result = me.getValue(director)
+        for i in range(1, lt.size(result['movies'])+1):
+            index = lt.getElement(result['movies'],i)
+    
+            mapKey = mp.get(catalog['moviesIds'],index)
+            if mapKey:
+                mapValue = me.getValue(mapKey)
+                movieavg += float(mapValue['vote_average'])
+                lt.changeInfo(result['movies'],i,mapValue['title'])
+        totalMovies = lt.size(result['movies'])
+        result['vote_average'] = round((movieavg/totalMovies),5)
+        return(result['movies']['elements'],result['vote_average'],totalMovies)
+    else:
+        return 0
+    
+>>>>>>> 6b618318523b927e370c4cd04983d85882597332
 
 def moviesSize(catalog):
     """
@@ -199,6 +271,12 @@ def producersSize(catalog):
     Número de productoras en el catálogo
     """
     return mp.size(catalog['producers'])
+
+def directorsSize(catalog):
+    """
+    Número de directores en el catálogo
+    """
+    return mp.size(catalog['directors'])
 
 
 # ==============================
@@ -235,7 +313,7 @@ def compareDirectorsByName(keyname, director):
     Compara dos nombres de director. El primero es una cadena
     y el segundo un entry de un map
     """
-    directorentry = me.getKey(producer)
+    directorentry = me.getKey(director)
     if (keyname == directorentry):
         return 0
     elif (keyname > directorentry):

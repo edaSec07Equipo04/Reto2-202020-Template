@@ -69,13 +69,24 @@ def producersSize(catalog):
     """
     return model.producersSize(catalog)
 
+def directorsSize(catalog):
+    """
+    Número de directores leídos
+    """
+    return model.directorsSize(catalog)
+
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
 
+<<<<<<< HEAD
 #############Requerimiento 3 ###########
 
 def moviesbyactor(catalog,actor):
     return model.getMoviesByActor(catalog,actor)
+=======
+def getMoviesByDirector(catalog,director):
+    return model.getMoviesByDirector(catalog,director)
+>>>>>>> 6b618318523b927e370c4cd04983d85882597332
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -99,7 +110,8 @@ def loadCSVFile (file, cmpfunction):
 
 def loadMovies(catalog,moviesfile):
     """
-    Descripción
+    Carga cada una de las lineas del archivo de películas.
+    - Se agrega cada película al catalogo de películas
     """
     moviesfile = cf.data_dir + moviesfile
     dialect = csv.excel()
@@ -115,9 +127,31 @@ def loadMovies(catalog,moviesfile):
         print("Hubo un error en la carga de archivos")
 
 
-def loadData(catalog,moviesfile):
+def loadCasting(catalog,castingfile):
     """
-    Descripción
+    Carga cada una de las lineas del archivo de películas.
+    - Se agrega cada película al catalogo de películas
+    """
+    castingfile = cf.data_dir + castingfile
+    dialect = csv.excel()
+    dialect.delimiter=';'
+    try:
+        with open(castingfile,encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile,dialect=dialect)
+            for movie in row:
+                directors = movie['director_name'] # Se obtienen los productores
+                model.addMovieDirector(catalog,directors,movie['id'])
+    except:
+        print("Hubo un error en la carga de archivos")
+    
+
+def loadData(catalog,moviesfile,castingfile):
+    """
+    Carga los datos de los archivos en el modelo
     """
     loadMovies(catalog,moviesfile)
+<<<<<<< HEAD
 
+=======
+    loadCasting(catalog,castingfile)
+>>>>>>> 6b618318523b927e370c4cd04983d85882597332
