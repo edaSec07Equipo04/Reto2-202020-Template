@@ -206,7 +206,6 @@ def getGoviesByProductionCompany(catalog,producer):
     
     return None
 
-<<<<<<< HEAD
 ############requerimiento 3#############################
 def getMoviesByActor(catalog,actor):
     company = mp.get(catalog['actors'],actor)
@@ -238,27 +237,6 @@ def getMoviesByActor(catalog,actor):
 ###################################################
 
 
-=======
-def getMoviesByDirector(catalog,director_name): 
-    director = mp.get(catalog['directors'],director_name)
-    movieavg = 0
-    if director:
-        result = me.getValue(director)
-        for i in range(1, lt.size(result['movies'])+1):
-            index = lt.getElement(result['movies'],i)
-    
-            mapKey = mp.get(catalog['moviesIds'],index)
-            if mapKey:
-                mapValue = me.getValue(mapKey)
-                movieavg += float(mapValue['vote_average'])
-                lt.changeInfo(result['movies'],i,mapValue['title'])
-        totalMovies = lt.size(result['movies'])
-        result['vote_average'] = round((movieavg/totalMovies),5)
-        return(result['movies']['elements'],result['vote_average'],totalMovies)
-    else:
-        return 0
-    
->>>>>>> 6b618318523b927e370c4cd04983d85882597332
 
 def moviesSize(catalog):
     """
