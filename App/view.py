@@ -40,7 +40,8 @@ operación seleccionada.
 
 #moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
 moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
-castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+#castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -90,7 +91,16 @@ def printMoviesByDirector(director):
     '''
     Imprime los datos del director
     '''
-    return 0
+    data = controller.getMoviesByDirector(cont,director)
+    if data== 0:
+        print("No se halló el director ingresado")
+        return -1
+    else:       
+        titles,vote_average,quantity=data
+        print('Películas dirigidas por el director:')
+        print(titles)
+        print('Cantidad de películas dirigidas por el director: '+str(quantity))
+        print('Promedio de calificación de las películas de este director: '+str(vote_average))
 
 
 def printMoviesByActor(actor):
@@ -157,9 +167,10 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información...")
-        controller.loadData(cont,moviesfile)
+        controller.loadData(cont,moviesfile,castingfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
+        print('Directores cargados: ' + str(controller.directorsSize(cont)))
         print('Información cargada con éxito')
 
     elif int(inputs[0]) == 3:
@@ -168,12 +179,17 @@ while True:
         printMoviesByProductionCompany(producer)
 
     elif int(inputs[0]) == 4:
-        actor = input("Buscando las películas del actor?: ")
+        director = input("Buscando las películas del director?: ")
+        director=director.title()
+        printMoviesByDirector(director)
 
     elif int(inputs[0]) == 5:
-        genero = input("Buscando las películas del género?: ")
+        actor = input("Buscando las películas del actor?: ")
 
     elif int(inputs[0]) == 6:
+        genero = input("Buscando las películas del género?: ")
+
+    elif int(inputs[0]) == 7:
         pais = input("Buscando las películas del país?: ")
 
     else:
