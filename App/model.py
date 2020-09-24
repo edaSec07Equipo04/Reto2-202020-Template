@@ -40,7 +40,7 @@ def nueva_lista(estructura):
         
     return lista
  
-def ananir_pelicula(lista,pelicula):
+def añanir_pelicula(lista,pelicula):
  
     lista = lt.addLast(lista,pelicula)
  
@@ -74,7 +74,7 @@ def newCatalog():
                                   maptype= 'PROBING',
                                   loadfactor=0.5,
                                   comparefunction=compareDirectorsByName)
-    catalog['actors']=mp.newMap(350,
+    catalog['actors']=mp.newMap(35000,
                                maptype= 'PROBING',
                                loadfactor=0.5,
                                comparefunction=compareActorsByName)
@@ -278,7 +278,7 @@ def getGoviesByProductionCompany(catalog,producer):
         vote_average = result['vote_average']
         for i in range(1,lt.size(result['movies'])+1):
             movie = lt.getElement(result['movies'],i)
-            ananir_pelicula(lst,movie['title'])
+            aanir_pelicula(lst,movie['title'])
         return lst['elements'],totalMovies,vote_average
     
     return None
@@ -297,7 +297,7 @@ def MoviesByGenre(catalog,genre):
         vote_count= resultado['vote_count']
         for i in range(1,lt.size(resultado['movies'])+1):
             movie=lt.getElement(resultado['movies'],i)
-            ananir_pelicula(lst,movie['title'])
+            añanir_pelicula(lst,movie['title'])
         return lst['elements'],totalMovies, vote_count
 
     return None
