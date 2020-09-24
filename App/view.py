@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
 #moviesfile = "theMoviesdb/Prueba.csv"
 #castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
@@ -173,6 +173,7 @@ while True:
         controller.loadData(cont,moviesfile,castingfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
+        print('Actores cargados: '+str(controller.actorSize(cont)))
         print('Generos cargados: '+ str(controller.genresSize(cont)))
         print('Directores cargados: ' + str(controller.directorsSize(cont)))
         print('Paises cargados: '+str(controller.countriesSize(cont)))

@@ -94,6 +94,10 @@ def countriesSize(catalog):
     """
     return model.countriesSize(catalog)
 
+def actorSize(catalog):
+
+    return model.actorsSizes(catalog)
+
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
 

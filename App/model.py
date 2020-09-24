@@ -75,7 +75,7 @@ def newCatalog():
                                   maptype= 'PROBING',
                                   loadfactor=0.5,
                                   comparefunction=compareDirectorsByName)
-    catalog['actors']=mp.newMap(35000,
+    catalog['actors']=mp.newMap(347737,
                                maptype= 'PROBING',
                                loadfactor=0.5,
                                comparefunction=compareActorsByName)
@@ -478,3 +478,8 @@ def compareCountriesByName(keyname, country):
     else:
         return -1
 
+def actorsSizes(catalog):
+    """
+    Numero de actoresen el catalogo
+    """
+    return mp.size(catalog['actors'])
