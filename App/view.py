@@ -38,8 +38,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
 #moviesfile = "theMoviesdb/Prueba.csv"
 castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 #castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'

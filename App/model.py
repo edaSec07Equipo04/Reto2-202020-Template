@@ -41,7 +41,7 @@ def nueva_lista(estructura):
         
     return lista
  
-def ananir_pelicula(lista,pelicula):
+def añanir_pelicula(lista,pelicula):
  
     lista = lt.addLast(lista,pelicula)
  
@@ -63,7 +63,8 @@ def newCatalog():
                'directors':None,
                'actors':None,
                'genres':None,
-               'countries':None}
+               'countries':None,
+               'directorIds':None}
 
     catalog['movies']=lt.newList('ARRAY_LIST',compareRecordIds)
     catalog['moviesIds'] = mp.newMap(329999,
