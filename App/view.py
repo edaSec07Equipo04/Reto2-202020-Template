@@ -38,10 +38,10 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
-#castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
-castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
+moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+#castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -91,10 +91,6 @@ def printMoviesByDirector(director):
     '''
     Imprime los datos del director
     '''
-<<<<<<< HEAD
-    
-    return 0
-=======
     data = controller.getMoviesByDirector(cont,director)
     if data== 0:
         print("No se halló el director ingresado")
@@ -105,25 +101,24 @@ def printMoviesByDirector(director):
         print(titles)
         print('Cantidad de películas dirigidas por el director: '+str(quantity))
         print('Promedio de calificación de las películas de este director: '+str(vote_average))
->>>>>>> 6b618318523b927e370c4cd04983d85882597332
-
 
 def printMoviesByActor(actor):
     '''
     Imprime los datos del actor
     '''
-    if controller.moviesbyactor(cont,actor) == None:
+
+    hola = controller.moviesbyactor(cont,actor)
+    if hola == None:
         print("No se encontró el actor ingresado")
         return -1
     else:
         
-        peliculas,total,voto = controller.moviesbyactor(cont,actor)
+        peliculas,voto,total = hola
         print("Las peliculas en las que participo " + actor + " fueron :")
         print(peliculas)
-        print("El actor ha participado en " + str(total))
-        print("El promedio de votación de las películas en las que participó este actor fué: " + str(voto))
+        print("El actor ha participado en " + str(total) + " peliculas.")
+        print("El promedio de votación de las películas en las que participó este actor fué: " + str(round(voto,2)))
 
-    return 0
 
 
 def printMoviesByGenre(genre):
@@ -183,17 +178,11 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información...")
-<<<<<<< HEAD
-        controller.loadData(cont,moviesfile)
-        
-=======
         controller.loadData(cont,moviesfile,castingfile)
->>>>>>> 6b618318523b927e370c4cd04983d85882597332
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
         print('Directores cargados: ' + str(controller.directorsSize(cont)))
         print('Información cargada con éxito')
-        
 
     elif int(inputs[0]) == 3:
         producer = input("Buscando las películas de la productora?: ")
@@ -202,7 +191,8 @@ while True:
 
     elif int(inputs[0]) == 4:
         director = input("Buscando las películas del director?: ")
-<<<<<<< HEAD
+        director=director.title()
+        printMoviesByDirector(director)
 
     elif int(inputs[0]) == 5:
         actor = input("Buscando las películas del actor?: ")
@@ -211,26 +201,12 @@ while True:
 
 
     elif int(inputs[0]) == 6:
-        genero = input("Buscando las películas del genero?: ")
-
-    elif int(input[0]) == 7:
-        pais = input("Buscando peliculas del pais?")
-=======
-        director=director.title()
-        printMoviesByDirector(director)
-
-    elif int(inputs[0]) == 5:
-        actor = input("Buscando las películas del actor?: ")
-
-    elif int(inputs[0]) == 6:
         genero = input("Buscando las películas del género?: ")
 
     elif int(inputs[0]) == 7:
         pais = input("Buscando las películas del país?: ")
->>>>>>> 6b618318523b927e370c4cd04983d85882597332
 
     else:
         sys.exit(0)
 sys.exit(0)
 
-        

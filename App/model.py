@@ -28,7 +28,6 @@ assert config
 """
 En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
-
 """
 
 # -----------------------------------------------------
@@ -49,12 +48,9 @@ def añanir_pelicula(lista,pelicula):
 
 def newCatalog():
     """ Inicializa el catálogo de películas
-
     Crea una lista vacia para guardar todas las películas
-
     Se crean indices (Maps) por los siguientes criterios:
     
-
     Retorna el catalogo inicializado.
     """
     catalog = {'movies': None,
@@ -112,6 +108,17 @@ def newDirector(director_name):
     director['name'] = director_name
     director['movies']=lt.newList('ARRAY_LIST',compareDirectorsByName)
     return director
+
+def newActor(actor_name):
+    """
+    Crea una nueva estructura para modelar las películas de un director
+    y su promedio de calificación
+    """
+    actor = {'name':'','movies':None,'vote_average':0}
+    actor['name'] = actor_name
+    actor['movies']=lt.newList('ARRAY_LIST',compareActorsByName)
+    return actor
+
 
 def newCountry(country_name):
     """
@@ -173,6 +180,27 @@ def addMovieDirector(catalog,director,movie):
         mp.put(directors,director,data)
     lt.addLast(data['movies'],movie)
 
+def addMovieActor(catalog,actor,movie):
+    """
+    Crea una nueva estructura para modelar las películas de un director de cine
+    y su promedio de calificación
+    """
+    actors = catalog['actors']
+    existactor = mp.contains(actors,actor)
+    if existactor:
+        entry = mp.get(actors,actor)
+        data = me.getValue(entry)
+    else:
+        data = newActor(actor)
+        mp.put(actors,actor,data)
+    lt.addLast(data['movies'],movie)
+
+    promediado = data['vote_average']
+
+
+
+
+
 def addCountry(catalog,country,movie):
     """
     Crea una nueva estructura para modelar las películas de un país
@@ -206,37 +234,52 @@ def getGoviesByProductionCompany(catalog,producer):
     
     return None
 
-############requerimiento 3#############################
-def getMoviesByActor(catalog,actor):
-    company = mp.get(catalog['actors'],actor)
-
-    if company:
-        lst = nueva_lista('ARRAY_LIST')
-        r = me.getValue(actor)
-
-        totalMovies = lt.size(r['movies'])
-
-       
-        for i in range(1,lt.size(r['movies']+1)):
-            voto = 0
-            movie = lt.getElement(r['movies'],i)
-            añanir_pelicula(lst,movie['title'])
-
-            voto += int(lt.getElement(r['vote_average'],i))
-
-
-        voto = round((voto/totalMovies),2)
-
-
-        return lst['elements'],totalMovies,voto
+def getMoviesByDirector(catalog,director_name): 
+    director = mp.get(catalog['directors'],director_name)
+    movieavg = 0
+    if director:
+        result = me.getValue(director)
+        for i in range(1, lt.size(result['movies'])+1):
+            index = lt.getElement(result['movies'],i)
+    
+            mapKey = mp.get(catalog['moviesIds'],index)
+            if mapKey:
+                mapValue = me.getValue(mapKey)
+                movieavg += float(mapValue['vote_average'])
+                lt.changeInfo(result['movies'],i,mapValue['title'])
+        totalMovies = lt.size(result['movies'])
+        result['vote_average'] = round((movieavg/totalMovies),5)
+        return(result['movies']['elements'],result['vote_average'],totalMovies)
     else:
-        return None
+        return 0
 
+############requerimiento 3#############################
+def getMoviesByActor(catalog,actor_name):
+    
+    actor = mp.get(catalog['actors'],actor_name)
+    promedio = 0
+    if actor:
+        r = me.getValue(actor)
+        for i in range(1, lt.size(r['movies'])+1):
+            index = lt.getElement(r['movies'],i)
+
+            mapKey = mp.get(catalog['moviesIds'],index)
+            if mapKey:
+                mapValue = me.getValue(mapKey)
+                promedio += float(mapValue['vote_average'])
+               
+                lt.changeInfo(r['movies'],i,mapValue['title'])
+        totalMovies = lt.size(r['movies'])
+        print(promedio)
+        r['vote_average'] = (promedio/totalMovies)
+        return r['movies']['elements'],r['vote_average'],totalMovies
+    else:
+        return -1
 
 
 ###################################################
-
-
+    
+    
 
 def moviesSize(catalog):
     """
@@ -341,4 +384,3 @@ def compareCountriesByName(keyname, country):
     else:
         return -1
 
-    
