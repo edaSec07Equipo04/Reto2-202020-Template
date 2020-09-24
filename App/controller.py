@@ -75,11 +75,21 @@ def directorsSize(catalog):
     """
     return model.directorsSize(catalog)
 
+def countriesSize(catalog):
+    """
+    Número de paises leídos
+    """
+    return model.countriesSize(catalog)
+
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
 
 def getMoviesByDirector(catalog,director):
     return model.getMoviesByDirector(catalog,director)
+
+def getMoviesByCountry(catalog,country):
+    return model.getMoviesByCountry(catalog,country)
+
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -113,9 +123,17 @@ def loadMovies(catalog,moviesfile):
         with open(moviesfile,encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile,dialect=dialect)
             for movie in row:
+                lst = model.nueva_lista(ar)
                 model.addMovie(catalog,movie)
                 producers = movie['production_companies'] # Se obtienen las productoras
+                countries = movie['production_countries'] # Se obtienen los países
+                release_date = movie['release_date']
+                year = release_date.split("/")
                 model.addMovieProducer(catalog,producers,movie)
+                model.añanir_pelicula(lst,movie['title'])
+                model.añanir_pelicula(lst,year[-1])
+                model.añanir_pelicula(lst,movie['id'])
+                model.addCountry(catalog,countries,lst)
     except:
         print("Hubo un error en la carga de archivos")
 
@@ -132,7 +150,8 @@ def loadCasting(catalog,castingfile):
         with open(castingfile,encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile,dialect=dialect)
             for movie in row:
-                directors = movie['director_name'] # Se obtienen los productores
+                model.addDirectorId(catalog,movie)
+                directors = movie['director_name'] # Se obtienen los productores               
                 model.addMovieDirector(catalog,directors,movie['id'])
     except:
         print("Hubo un error en la carga de archivos")

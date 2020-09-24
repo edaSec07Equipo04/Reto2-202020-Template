@@ -38,10 +38,10 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
-#castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
-castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
+moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+#castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
@@ -121,6 +121,10 @@ def printMoviesByCountry(country):
     '''
     Imprime los datos del país
     '''
+    result = controller.getMoviesByCountry(cont,country)
+    for i in range(1,lt.size(result['movies'])+1):
+        a = lt.getElement(result['movies'],i)
+        print(a['elements'])
     return 0
 
 
@@ -146,13 +150,7 @@ Menú principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    '''
-    if int(inputs[0])==1:
-        print("Cargando datos...")
-        data = controller.loadCSVFile(moviesfile,controller.compareRecordIds)
-        printLoadingData(data)
-        print("Información cargada exitosamente!")
-    '''
+
     if int(inputs[0])==1:
         print("Inicializando catálogo...")
         try:
@@ -161,16 +159,13 @@ while True:
         except:
             ("Se ha producido un error inicializando el catálogo")
 
-    # elif int(inputs[0]) == 2:
-     #   print("Cargando información de los archivos ....")
-      #  print('Información cargada exitosamente!') 
-
     elif int(inputs[0]) == 2:
         print("Cargando información...")
         controller.loadData(cont,moviesfile,castingfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
         print('Directores cargados: ' + str(controller.directorsSize(cont)))
+        print('Paises cargados: '+str(controller.countriesSize(cont)))
         print('Información cargada con éxito')
 
     elif int(inputs[0]) == 3:
@@ -191,7 +186,8 @@ while True:
 
     elif int(inputs[0]) == 7:
         pais = input("Buscando las películas del país?: ")
-
+        pais = pais.title()
+        printMoviesByCountry(pais)
     else:
         sys.exit(0)
 sys.exit(0)

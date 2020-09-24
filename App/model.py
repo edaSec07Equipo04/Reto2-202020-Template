@@ -86,10 +86,14 @@ def newCatalog():
                                maptype= 'PROBING',
                                loadfactor=0.5,
                                comparefunction=compareGenresByName)
-    catalog['countries']=mp.newMap(350,
+    catalog['countries']=mp.newMap(239,
                                maptype= 'PROBING',
                                loadfactor=0.5,
-                               comparefunction=compareCountriesByName)                                                             
+                               comparefunction=compareCountriesByName)
+    catalog['directorsIds']=mp.newMap(329999,
+                                     maptype= 'PROBING',
+                                     loadfactor=0.5,
+                                     comparefunction=compareRecordIds)                                                             
     return catalog
 
 
@@ -135,6 +139,12 @@ def addMovie(catalog,movie):
     lt.addLast(catalog['movies'],movie)
     mp.put(catalog['moviesIds'],movie['id'],movie)
 
+def addDirectorId(catalog,movie):
+    """
+    Esta funcion adiciona una película a la lista de películas,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    """
+    mp.put(catalog['directorsIds'],movie['id'],movie)
 
 def addMovieProducer(catalog,company,movie):
     """
@@ -224,7 +234,21 @@ def getMoviesByDirector(catalog,director_name):
         return(result['movies']['elements'],result['vote_average'],totalMovies)
     else:
         return 0
-    
+
+def getMoviesByCountry(catalog,country_name):
+    country = mp.get(catalog['countries'],country_name)
+    if country:
+        result = me.getValue(country)
+        for i in range(1,lt.size(result['movies'])+1):
+            info = lt.getElement(result['movies'],i)
+            mapKey=mp.get(catalog['directorsIds'],info['elements'][2])
+            if mapKey:
+                mapValue = me.getValue(mapKey)
+                lt.changeInfo(info,3,mapValue['director_name'])
+        return result        
+    else:
+        return 0
+
 
 def moviesSize(catalog):
     """
@@ -244,6 +268,11 @@ def directorsSize(catalog):
     """
     return mp.size(catalog['directors'])
 
+def countriesSize(catalog):
+    """
+    Número de paises en el catálogo
+    """
+    return mp.size(catalog['countries'])
 
 # ==============================
 # Funciones de Comparacion
