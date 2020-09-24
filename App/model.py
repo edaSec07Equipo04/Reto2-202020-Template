@@ -35,13 +35,13 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
 
-def nueva_lista(estructura,):
+def nueva_lista(estructura):
     
     lista = lt.newList(datastructure= 'ARRAY_LIST',cmpfunction= None)
         
     return lista
  
-def añanir_pelicula(lista,pelicula):
+def ananir_pelicula(lista,pelicula):
  
     lista = lt.addLast(lista,pelicula)
  
@@ -82,7 +82,7 @@ def newCatalog():
                                maptype= 'PROBING',
                                loadfactor=0.5,
                                comparefunction=compareActorsByName)
-    catalog['genres']=mp.newMap(200,
+    catalog['genres']=mp.newMap(43,
                                maptype= 'PROBING',
                                loadfactor=0.5,
                                comparefunction=compareGenresByName)
@@ -102,11 +102,21 @@ def newProducer(company):
     Crea una nueva estructura para modelar las películas de una productora
     y su promedio de calificación
     """
-    producer = {'name': '', 'movies':None,'vote_average': 0}
+    producer = {'name': '', 'movies':None,'vote_average': 0.0}
     producer['name'] = company
     producer['movies'] = lt.newList('ARRAY_LIST',compareProducersByName)
     return producer
 
+def newGenre(genre):
+    #Requerimiento 4 - Sebastian Peña 
+    """
+    Crea una nueva estructura para modelar las peliculas de un genero 
+    y su promedio de votos
+    """
+    genero = {'name': '','movies': None,'vote_count': 0.0 }
+    genero['name']=genre
+    genero['movies']=lt.newList('ARRAY_LIST',compareGenresByName)
+    return genero 
 def newDirector(director_name):
     """
     Crea una nueva estructura para modelar las películas de un director
@@ -129,7 +139,10 @@ def newCountry(country_name):
 
     
 
+    
+#-----------------------------------------------
 # Funciones para agregar informacion al catalogo
+#-----------------------------------------------
 
 def addMovie(catalog,movie):
     """
@@ -151,6 +164,7 @@ def addMovieProducer(catalog,company,movie):
     Crea una nueva estructura para modelar las películas de una productora de cine
     y su promedio de calificación
     """
+    
     producers = catalog['producers']
     existproducer = mp.contains(producers,company)
     if existproducer:
@@ -165,7 +179,32 @@ def addMovieProducer(catalog,company,movie):
     if (proavg == 0.0):
         data['vote_average'] = float(movieavg)
     else:
-        data['vote_average'] = (proavg+float(movieavg))/2
+        data['vote_average'] = ((proavg*(lt.size(data["movies"])-1))+float(movieavg))/(lt.size(data['movies']))
+
+def addMovieGenre(catalog,genre,movie):
+    #Requerimiento 4 - Sebastian Peña
+    """
+    Esta funcion agrega cada pelicula por su genero.
+    Ademas incluye el promedio de votos por genero
+    """
+    
+    genres= catalog['genres']
+    existgenre = mp.contains(genres,genre)
+    if existgenre:
+        entry = mp.get(genres,genre)
+        data = me.getValue(entry)
+    else:
+        data = newGenre(genre)
+        mp.put(genres,genre,data)
+    lt.addLast(data['movies'],movie)
+
+    promediado= data['vote_count']
+    movie_pro = movie['vote_count']
+    if (promediado == 0.0):
+        data['vote_count']=float(movie_pro)
+    else:
+        data['vote_count']= ((promediado*(lt.size(data['movies'])-1))+float(movie_pro))/(lt.size(data['movies']))
+        
 
 
 def addMovieDirector(catalog,director,movie):
@@ -211,11 +250,29 @@ def getGoviesByProductionCompany(catalog,producer):
         vote_average = result['vote_average']
         for i in range(1,lt.size(result['movies'])+1):
             movie = lt.getElement(result['movies'],i)
-            añanir_pelicula(lst,movie['title'])
+            ananir_pelicula(lst,movie['title'])
         return lst['elements'],totalMovies,vote_average
     
     return None
 
+def MoviesByGenre(catalog,genre):
+    #Requerimiento 4 - Sebastian Peña
+    """
+    funcion que retorna las peliculas, promedio de votos y numero de peliculas
+    """
+    genres=mp.get(catalog['genres'],genre)
+
+    if genres:
+        lst= nueva_lista('ARRAY_LIST')
+        resultado = me.getValue(genres)
+        totalMovies = lt.size(resultado['movies'])
+        vote_count= resultado['vote_count']
+        for i in range(1,lt.size(resultado['movies'])+1):
+            movie=lt.getElement(resultado['movies'],i)
+            ananir_pelicula(lst,movie['title'])
+        return lst['elements'],totalMovies, vote_count
+
+    return None
 def getMoviesByDirector(catalog,director_name): 
     director = mp.get(catalog['directors'],director_name)
     movieavg = 0
@@ -261,6 +318,12 @@ def producersSize(catalog):
     Número de productoras en el catálogo
     """
     return mp.size(catalog['producers'])
+def genresSize(catalog):
+    #Requerimiento 4 - Sebastian Peña
+    """
+    Numero de generos en el catalogo
+    """
+    return mp.size(catalog['genres'])
 
 def directorsSize(catalog):
     """
@@ -332,6 +395,7 @@ def compareActorsByName(keyname, actor):
 
 
 def compareGenresByName(keyname, genre):
+    #Requerimiento 4 - Sebastian Peña
     """
     Compara dos nombres de género. El primero es una cadena
     y el segundo un entry de un map

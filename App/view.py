@@ -38,38 +38,23 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
-#moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
+moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/Prueba.csv"
 castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 #castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
+
+
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
-'''
-def printLoadingData(data):
-    """
-    Imprime la información de los datos cargados
-    """
-    if data:
-        print('Total de películas cargadas:',lt.size(data))
-        print("-------- Información de la primer película del archivo --------")
-        print('Título:',data['elements'][0]['title'])
-        print('Fecha de lanzamiento:',data['elements'][0]['release_date'])
-        print('Promedio de votación:',data['elements'][0]['vote_average'])
-        print('Total de votos:',data['elements'][0]['vote_count'])
-        print('Idioma de la película:',data['elements'][0]['original_language'])
-        print("-------- Información de la última película del archivo --------")
-        print('Título:',data['elements'][lt.size(data)-1]['title'])
-        print('Fecha de lanzamiento:',data['elements'][lt.size(data)-1]['release_date'])
-        print('Promedio de votación:',data['elements'][lt.size(data)-1]['vote_average'])
-        print('Total de votos:',data['elements'][lt.size(data)-1]['vote_count'])
-        print('Idioma de la película:',data['elements'][lt.size(data)-1]['original_language'])
-    else:
-        print('No se ha logrado cargar los archivos')
-'''
+
+
+
+
 
 
 def printMoviesByProductionCompany(producer):
@@ -84,8 +69,8 @@ def printMoviesByProductionCompany(producer):
         print('Películas producidas por la compañía:')
         print(titles)
         print('Cantidad de películas producidas por la compañía: ' + str(quantity))
-        print('Promedio de calificación de las películas de esta productora: '+str(round(vote_average,2)))
-
+        print('Promedio de calificación de las películas de esta productora: '+str(round(vote_average,4)))
+        
 
 def printMoviesByDirector(director):
     '''
@@ -111,10 +96,21 @@ def printMoviesByActor(actor):
 
 
 def printMoviesByGenre(genre):
+    #Requerimiento 4 - Sebastian Peña
     '''
     Imprime los datos del género
     '''
-    return 0
+    if controller.getMoviesByGenres(cont,genre)== None:
+        print("No se halló el genero ingresado")
+        return -1
+    else: 
+        titles,quantity,vote_count = controller.getMoviesByGenres(cont,genre)
+        print('Peliculas con el genero ingresado : ')
+        print(titles)
+        print('Cantidad de peliculas con el genero ingresado: ' + str(quantity))
+        print('Promedio de votos con el genero ingresado es: ' + str(round(vote_count,4)))
+
+
 
 
 def printMoviesByCountry(country):
@@ -144,9 +140,11 @@ def printMenu():
     print("7- Consultar las películas de un país")
     print("0- Salir")
 
-'''
-Menú principal
-'''
+#---------------------------------------------------
+#   Menú principal
+#---------------------------------------------------
+
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
@@ -164,6 +162,7 @@ while True:
         controller.loadData(cont,moviesfile,castingfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
+        print('Generos cargados: '+ str(controller.genresSize(cont)))
         print('Directores cargados: ' + str(controller.directorsSize(cont)))
         print('Paises cargados: '+str(controller.countriesSize(cont)))
         print('Información cargada con éxito')
@@ -172,7 +171,7 @@ while True:
         producer = input("Buscando las películas de la productora?: ")
         producer = producer.title()
         printMoviesByProductionCompany(producer)
-
+    
     elif int(inputs[0]) == 4:
         director = input("Buscando las películas del director?: ")
         director=director.title()
@@ -183,6 +182,8 @@ while True:
 
     elif int(inputs[0]) == 6:
         genero = input("Buscando las películas del género?: ")
+        genero = genero.title()
+        printMoviesByGenre(genero)
 
     elif int(inputs[0]) == 7:
         pais = input("Buscando las películas del país?: ")
