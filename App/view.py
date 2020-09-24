@@ -41,8 +41,8 @@ operación seleccionada.
 #moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
 moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
 #moviesfile = "theMoviesdb/Prueba.csv"
-castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
-#castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
+#castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
 
 
 
@@ -87,12 +87,23 @@ def printMoviesByDirector(director):
         print('Cantidad de películas dirigidas por el director: '+str(quantity))
         print('Promedio de calificación de las películas de este director: '+str(vote_average))
 
-
 def printMoviesByActor(actor):
     '''
     Imprime los datos del actor
     '''
-    return 0
+
+    hola = controller.moviesbyactor(cont,actor)
+    if hola == None:
+        print("No se encontró el actor ingresado")
+        return -1
+    else:
+        
+        peliculas,voto,total = hola
+        print("Las peliculas en las que participo " + actor + " fueron :")
+        print(peliculas)
+        print("El actor ha participado en " + str(total) + " peliculas.")
+        print("El promedio de votación de las películas en las que participó este actor fué: " + str(round(voto,2)))
+
 
 
 def printMoviesByGenre(genre):
@@ -179,6 +190,9 @@ while True:
 
     elif int(inputs[0]) == 5:
         actor = input("Buscando las películas del actor?: ")
+        actor = actor.title()
+        printMoviesByActor(actor)
+
 
     elif int(inputs[0]) == 6:
         genero = input("Buscando las películas del género?: ")
@@ -193,4 +207,3 @@ while True:
         sys.exit(0)
 sys.exit(0)
 
-        

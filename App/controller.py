@@ -20,6 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+
+ar = 'ARRAY_LIST'
+
 import config as cf
 from App import model
 import csv
@@ -103,6 +106,8 @@ def getMoviesByGenres(catalog,genre):
 def getMoviesByDirector(catalog,director):
     return model.getMoviesByDirector(catalog,director)
 
+def moviesbyactor(catalog,actor):
+    return model.getMoviesByActor(catalog,actor)
 def getMoviesByCountry(catalog,country):
     return model.getMoviesByCountry(catalog,country)
 
@@ -156,9 +161,42 @@ def loadCasting(catalog,castingfile):
         with open(castingfile,encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile,dialect=dialect)
             for movie in row:
+                directors = movie['director_name'] # Se obtienen los productores
+                #Se obtienen los actores
+                actor1 = movie['actor1_name'] 
+                actor2 = movie['actor2_name']
+                actor3 = movie['actor3_name']
+                actor4 = movie['actor3_name']
+                actor5 = movie['actor3_name']
+                
                 model.addDirectorId(catalog,movie)
-                directors = movie['director_name'] # Se obtienen los productores               
+                           
                 model.addMovieDirector(catalog,directors,movie['id'])
+
+                if actor1 != "none":
+                    model.addMovieActor(catalog,actor1,movie['id'])
+                else:
+                    None
+                if actor2 != "none":
+                    model.addMovieActor(catalog,actor2,movie['id'])
+                else:
+                    None
+                if actor3 != "none":
+                    model.addMovieActor(catalog,actor3,movie['id'])
+                else: 
+                    None
+                if actor3 != "none":
+                    model.addMovieActor(catalog,actor4,movie['id'])
+                else:
+                    None
+                if actor4 != "none":                                  
+                    model.addMovieActor(catalog,actor5,movie['id'])
+                else:
+                    None
+                if actor5 != "none":               
+                    model.addMovieActor(catalog,actor5,movie['id'])
+                else:
+                    None
     except:
         print("Hubo un error en la carga de archivos")
     
@@ -169,3 +207,4 @@ def loadData(catalog,moviesfile,castingfile):
     """
     loadMovies(catalog,moviesfile)
     loadCasting(catalog,castingfile)
+
