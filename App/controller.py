@@ -123,7 +123,7 @@ def loadMovies(catalog,moviesfile):
         with open(moviesfile,encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile,dialect=dialect)
             for movie in row:
-                lst = model.nueva_lista(ar)
+                lst = model.nueva_lista("ARRAY_LIST")
                 model.addMovie(catalog,movie)
                 producers = movie['production_companies'] # Se obtienen las productoras
                 countries = movie['production_countries'] # Se obtienen los países
