@@ -279,7 +279,7 @@ def getGoviesByProductionCompany(catalog,producer):
         vote_average = result['vote_average']
         for i in range(1,lt.size(result['movies'])+1):
             movie = lt.getElement(result['movies'],i)
-            aanir_pelicula(lst,movie['title'])
+            añanir_pelicula(lst,movie['title'])
         return lst['elements'],totalMovies,vote_average
     
     return None
