@@ -20,6 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+
+ar = 'ARRAY_LIST'
+
 import config as cf
 from App import model
 import csv
