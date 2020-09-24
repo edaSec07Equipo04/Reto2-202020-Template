@@ -40,13 +40,19 @@ operación seleccionada.
 
 #moviesfile = "theMoviesdb/SmallMoviesDetailsCleaned.csv"
 moviesfile = "theMoviesdb/AllMoviesDetailsCleaned.csv"
+#moviesfile = "theMoviesdb/Prueba.csv"
 castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
+#castingfile = 'theMoviesdb/AllMoviesCastingRaw.csv'
+
+
 
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
+
+
 '''
 def printLoadingData(data):
     """
@@ -83,8 +89,8 @@ def printMoviesByProductionCompany(producer):
         print('Películas producidas por la compañía:')
         print(titles)
         print('Cantidad de películas producidas por la compañía: ' + str(quantity))
-        print('Promedio de calificación de las películas de esta productora: '+str(round(vote_average,2)))
-
+        print('Promedio de calificación de las películas de esta productora: '+str(round(vote_average,4)))
+        
 
 def printMoviesByDirector(director):
     '''
@@ -101,10 +107,21 @@ def printMoviesByActor(actor):
 
 
 def printMoviesByGenre(genre):
+    #Requerimiento 4 - Sebastian Peña
     '''
     Imprime los datos del género
     '''
-    return 0
+    if controller.getMoviesByGenres(cont,genre)== None:
+        print("No se halló el genero ingresado")
+        return -1
+    else: 
+        titles,quantity,vote_count = controller.getMoviesByGenres(cont,genre)
+        print('Peliculas con el genero ingresado : ')
+        print(titles)
+        print('Cantidad de peliculas con el genero ingresado: ' + str(quantity))
+        print('Promedio de votos con el genero ingresado es: ' + str(round(vote_count,4)))
+
+
 
 
 def printMoviesByCountry(country):
@@ -130,9 +147,11 @@ def printMenu():
     print("7- Consultar las películas de un país")
     print("0- Salir")
 
-'''
-Menú principal
-'''
+#---------------------------------------------------
+#   Menú principal
+#---------------------------------------------------
+
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
@@ -151,29 +170,31 @@ while True:
         except:
             ("Se ha producido un error inicializando el catálogo")
 
-    # elif int(inputs[0]) == 2:
-     #   print("Cargando información de los archivos ....")
-      #  print('Información cargada exitosamente!') 
-
     elif int(inputs[0]) == 2:
         print("Cargando información...")
         controller.loadData(cont,moviesfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
+        print('Generos cargados: '+ str(controller.genresSize(cont)))
         print('Información cargada con éxito')
 
     elif int(inputs[0]) == 3:
         producer = input("Buscando las películas de la productora?: ")
         producer = producer.title()
         printMoviesByProductionCompany(producer)
-
+    
     elif int(inputs[0]) == 4:
-        actor = input("Buscando las películas del actor?: ")
+        director= input('buscando a un director?: ')
 
     elif int(inputs[0]) == 5:
-        genero = input("Buscando las películas del género?: ")
+        actor = input("Buscando las películas del actor?: ")
 
     elif int(inputs[0]) == 6:
+        genero = input("Buscando las películas del género?: ")
+        genero = genero.title()
+        printMoviesByGenre(genero)
+
+    elif int(inputs[0]) == 7:
         pais = input("Buscando las películas del país?: ")
 
     else:

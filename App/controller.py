@@ -37,7 +37,7 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
-ar = "ARRAY_LIST"
+
 
 def initCatalog():
     """
@@ -47,16 +47,20 @@ def initCatalog():
     catalog = model.newCatalog()
     return catalog
 
-def compareRecordIds (recordA, recordB):
+
+def compareRecordIds(recordA, recordB):
+
     if int(recordA['id']) == int(recordB['id']):
         return 0
+
     elif int(recordA['id']) > int(recordB['id']):
         return 1
-    return -1 
+    return -1
 
 # ___________________________________________________
 #  Funciones para la la obtención de datos requeridos
 # ___________________________________________________
+
 def moviesSize(catalog):
     """
     Número de películas leidas
@@ -69,32 +73,30 @@ def producersSize(catalog):
     """
     return model.producersSize(catalog)
 
+def genresSize(catalog):
+    #Requerimiento 4 - Sebastian Peña
+    """
+    conecta model con el view; funcion el tamaño del catalog de genres
+    """
+    return model.genresSize(catalog)
+
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
+
+def getMoviesByGenres(catalog,genre):
+    #Requerimiento 4 - Sebastian Peña
+    """
+    conecta el model con el view; funcion que realiza el requerimiento 4
+    """
+    return model.MoviesByGenre(catalog,genre)
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadCSVFile (file, cmpfunction):
-   
-    lst = model.nueva_lista(ar)
-    dialect = csv.excel()
-    dialect.delimiter=";"
-    try:
-        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                
-                model.añanir_pelicula(lst,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return lst
-
-
 def loadMovies(catalog,moviesfile):
     """
-    Descripción
+    Descripción cargar los archivos csv y categorizarlos (productoras, generos)
     """
     moviesfile = cf.data_dir + moviesfile
     dialect = csv.excel()
@@ -104,14 +106,19 @@ def loadMovies(catalog,moviesfile):
             row = csv.DictReader(csvfile,dialect=dialect)
             for movie in row:
                 model.addMovie(catalog,movie)
-                producers = movie['production_companies'] # Se obtienen las productoras
+                producers = movie['production_companies'] 
                 model.addMovieProducer(catalog,producers,movie)
+                genre= movie['genres']
+                genre_sep= genre.split('|')
+                for genero in genre_sep:
+                    model.addMovieGenre(catalog,genero,movie)
     except:
         print("Hubo un error en la carga de archivos")
 
 
+
 def loadData(catalog,moviesfile):
     """
-    Descripción
+    ejecuta la funcion loadmovies
     """
     loadMovies(catalog,moviesfile)
