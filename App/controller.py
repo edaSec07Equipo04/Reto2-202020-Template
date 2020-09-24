@@ -79,6 +79,11 @@ def genresSize(catalog):
     conecta model con el view; funcion el tamaño del catalog de genres
     """
     return model.genresSize(catalog)
+def directorsSize(catalog):
+    """
+    Número de directores leídos
+    """
+    return model.directorsSize(catalog)
 
 def getMoviesByProdutionCompany(catalog,producer):
     return model.getGoviesByProductionCompany(catalog,producer)
@@ -89,6 +94,8 @@ def getMoviesByGenres(catalog,genre):
     conecta el model con el view; funcion que realiza el requerimiento 4
     """
     return model.MoviesByGenre(catalog,genre)
+def getMoviesByDirector(catalog,director):
+    return model.getMoviesByDirector(catalog,director)
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
@@ -96,7 +103,8 @@ def getMoviesByGenres(catalog,genre):
 
 def loadMovies(catalog,moviesfile):
     """
-    Descripción cargar los archivos csv y categorizarlos (productoras, generos)
+    Carga cada una de las lineas del archivo de películas.
+    - Se agrega cada película al catalogo de películas
     """
     moviesfile = cf.data_dir + moviesfile
     dialect = csv.excel()
@@ -117,8 +125,28 @@ def loadMovies(catalog,moviesfile):
 
 
 
-def loadData(catalog,moviesfile):
+
+def loadCasting(catalog,castingfile):
     """
-    ejecuta la funcion loadmovies
+    Carga cada una de las lineas del archivo de películas.
+    - Se agrega cada película al catalogo de películas
+    """
+    castingfile = cf.data_dir + castingfile
+    dialect = csv.excel()
+    dialect.delimiter=';'
+    try:
+        with open(castingfile,encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile,dialect=dialect)
+            for movie in row:
+                directors = movie['director_name'] # Se obtienen los productores
+                model.addMovieDirector(catalog,directors,movie['id'])
+    except:
+        print("Hubo un error en la carga de archivos")
+    
+
+def loadData(catalog,moviesfile,castingfile):
+    """
+    Carga los datos de los archivos en el modelo
     """
     loadMovies(catalog,moviesfile)
+    loadCasting(catalog,castingfile)

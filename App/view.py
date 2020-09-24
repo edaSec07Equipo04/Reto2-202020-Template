@@ -53,28 +53,8 @@ castingfile = 'theMoviesdb/MoviesCastingRaw-small.csv'
 # ___________________________________________________
 
 
-'''
-def printLoadingData(data):
-    """
-    Imprime la información de los datos cargados
-    """
-    if data:
-        print('Total de películas cargadas:',lt.size(data))
-        print("-------- Información de la primer película del archivo --------")
-        print('Título:',data['elements'][0]['title'])
-        print('Fecha de lanzamiento:',data['elements'][0]['release_date'])
-        print('Promedio de votación:',data['elements'][0]['vote_average'])
-        print('Total de votos:',data['elements'][0]['vote_count'])
-        print('Idioma de la película:',data['elements'][0]['original_language'])
-        print("-------- Información de la última película del archivo --------")
-        print('Título:',data['elements'][lt.size(data)-1]['title'])
-        print('Fecha de lanzamiento:',data['elements'][lt.size(data)-1]['release_date'])
-        print('Promedio de votación:',data['elements'][lt.size(data)-1]['vote_average'])
-        print('Total de votos:',data['elements'][lt.size(data)-1]['vote_count'])
-        print('Idioma de la película:',data['elements'][lt.size(data)-1]['original_language'])
-    else:
-        print('No se ha logrado cargar los archivos')
-'''
+
+
 
 
 def printMoviesByProductionCompany(producer):
@@ -96,7 +76,16 @@ def printMoviesByDirector(director):
     '''
     Imprime los datos del director
     '''
-    return 0
+    data = controller.getMoviesByDirector(cont,director)
+    if data== 0:
+        print("No se halló el director ingresado")
+        return -1
+    else:       
+        titles,vote_average,quantity=data
+        print('Películas dirigidas por el director:')
+        print(titles)
+        print('Cantidad de películas dirigidas por el director: '+str(quantity))
+        print('Promedio de calificación de las películas de este director: '+str(vote_average))
 
 
 def printMoviesByActor(actor):
@@ -172,10 +161,11 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información...")
-        controller.loadData(cont,moviesfile)
+        controller.loadData(cont,moviesfile,castingfile)
         print('Películas cargadas: '+ str(controller.moviesSize(cont)))
         print('Productoras cargadas: '+ str(controller.producersSize(cont)))
         print('Generos cargados: '+ str(controller.genresSize(cont)))
+        print('Directores cargados: ' + str(controller.directorsSize(cont)))
         print('Información cargada con éxito')
 
     elif int(inputs[0]) == 3:
@@ -184,7 +174,9 @@ while True:
         printMoviesByProductionCompany(producer)
     
     elif int(inputs[0]) == 4:
-        director= input('buscando a un director?: ')
+        director = input("Buscando las películas del director?: ")
+        director=director.title()
+        printMoviesByDirector(director)
 
     elif int(inputs[0]) == 5:
         actor = input("Buscando las películas del actor?: ")
